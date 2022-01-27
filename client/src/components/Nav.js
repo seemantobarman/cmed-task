@@ -15,7 +15,7 @@ function Nav({ history }) {
   };
 
   const handleLogout = () => {
-    logout(function () {
+    logout(function() {
       return history.push("/");
     });
   };
@@ -53,6 +53,7 @@ function Nav({ history }) {
               colorScheme="red"
               variant="ghost"
               onClick={() => history.push("/add")}
+              mr="5px"
             >
               ADD
             </Button>
@@ -61,6 +62,7 @@ function Nav({ history }) {
               colorScheme="red"
               variant="ghost"
               onClick={() => history.push("/consume")}
+              mr="5px"
             >
               API
             </Button>

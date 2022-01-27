@@ -12,14 +12,6 @@ import {
   Th,
   Tbody,
   Td,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
 } from "@chakra-ui/react";
 import moment from "moment";
 import { fakeData } from "../fakeData";
@@ -30,14 +22,15 @@ function Homepage() {
   const [toDate, setToDate] = useState("");
   const [dataItems, setDataItems] = useState([]);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   const handelSearch = () => {
     const FormattedFromDate = moment(fromDate, "YYYY-MM-DD").format(
       "DD-MM-YYYY"
     );
-    console.log("FormattedFromDate--->", FormattedFromDate);
     const FormattedToDate = moment(toDate, "YYYY-MM-DD").format("DD-MM-YYYY");
+
+    const dateRange = dateRangeArr(fromDate, toDate);
+    const filteredData = filterItemsBasedOnDate(dateRange, fakeData);
+    setDataItems(filteredData);
   };
 
   const dateRangeArr = (from, to) => {
@@ -71,8 +64,15 @@ function Homepage() {
   };
 
   useEffect(() => {
-    const startOfMonth = moment().startOf("month").format("YYYY-MM-DD");
-    const endOfMonth = moment().endOf("month").format("YYYY-MM-DD");
+    const startOfMonth = moment()
+      .startOf("month")
+      .format("YYYY-MM-DD");
+    const endOfMonth = moment()
+      .endOf("month")
+      .format("YYYY-MM-DD");
+
+    setFromDate(startOfMonth);
+    setToDate(endOfMonth);
 
     const dateRange = dateRangeArr(startOfMonth, endOfMonth);
     const data = filterItemsBasedOnDate(dateRange, fakeData);
