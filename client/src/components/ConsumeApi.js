@@ -34,7 +34,6 @@ function ConsumeApi() {
 
         b.interactionPair.map((item, index) => {
           const [c, d] = item.interactionConcept;
-          console.log(d);
 
           const { minConceptItem, sourceConceptItem } = c;
           const { name, rxcui, tty } = minConceptItem;
@@ -52,8 +51,6 @@ function ConsumeApi() {
 
           reformattedArr.push(tempObj);
         });
-
-        console.log(reformattedArr);
 
         setData(reformattedArr);
         setLoading(false);
@@ -80,7 +77,9 @@ function ConsumeApi() {
     }
   };
   return loading ? (
-    <Spinner />
+    <div style={{ width: "100vw", textAlign: "center", marginTop: "10%" }}>
+      <Spinner size="xl" />
+    </div>
   ) : (
     <>
       <Table maxW="98%" m={15} mt={20} rounded="lg" variant="simple">
