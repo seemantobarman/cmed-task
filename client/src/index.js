@@ -4,8 +4,8 @@ import { ChakraProvider } from "@chakra-ui/react";
 import Routes from "./Routes";
 
 ReactDOM.render(
-  <ChakraProvider>
-    <Routes />
-  </ChakraProvider>,
-  document.getElementById("root")
+    <ChakraProvider>
+        <Routes />
+    </ChakraProvider>,
+    document.getElementById("root")
 );

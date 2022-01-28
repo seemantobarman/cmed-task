@@ -9,21 +9,26 @@ import UpdatePrescription from "./components/UpdatePrescription";
 import ConsumeApi from "./components/ConsumeApi";
 
 function Routes() {
-  return (
-    <BrowserRouter>
-      {/* Navigation Bar */}
-      <Nav />
+    return (
+        <BrowserRouter>
+            {/* Navigation Bar */}
+            <Nav />
 
-      {/* Body */}
-      <Switch>
-        <Route path="/login" exact component={Login} />
-        <PrivateRoute path="/" exact component={Homepage} />
-        <PrivateRoute path="/add" exact component={AddPrescription} />
-        <PrivateRoute path="/update/:id" exact component={UpdatePrescription} />
-        <PrivateRoute path="/consume" exact component={ConsumeApi} />
-      </Switch>
-    </BrowserRouter>
-  );
+            {/* Body */}
+            <Switch>
+                <Route path="/login" exact component={Login} />
+                <PrivateRoute path="/" exact component={Homepage} />
+                <PrivateRoute path="/add" exact component={AddPrescription} />
+                <PrivateRoute
+                    path="/update/:id"
+                    exact
+                    component={UpdatePrescription}
+                />
+                <PrivateRoute path="/consume" exact component={ConsumeApi} />
+                <Route component={Login} />
+            </Switch>
+        </BrowserRouter>
+    );
 }
 
 export default Routes;
