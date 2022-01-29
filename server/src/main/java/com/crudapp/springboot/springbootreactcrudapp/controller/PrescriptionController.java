@@ -18,7 +18,7 @@ public class PrescriptionController {
     @Autowired
     private PrescriptionRepository prescriptionRepository;
 
-    @GetMapping("/all")
+    @GetMapping("/v1/prescription")
     public List<Prescription> getAllPrescriptions(){
         return prescriptionRepository.findAll();
     }

@@ -19,10 +19,11 @@ public class Prescription {
     @Column(name = "gender")
     private String gender;
 
-    @Column(name = "diagnosis")
+
+    @Column(name = "diagnosis", length = 500)
     private String diagnosis;
 
-    @Column(name = "medications")
+    @Column(name = "medications", length = 500)
     private String medications;
 
     @Column(name = "prescriptionDate")

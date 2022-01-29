@@ -8,14 +8,17 @@ import {
     RadioGroup,
     Stack,
     Text,
+    useToast,
 } from "@chakra-ui/react";
 import moment from "moment";
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 
 function UpdatePrescription() {
     const { id } = useParams();
+    const toast = useToast();
+    const history = useHistory();
 
     const [gender, setGender] = useState("male");
     const [name, setName] = useState("");
@@ -26,12 +29,6 @@ function UpdatePrescription() {
     const [nextVisitDate, setNextVisitDate] = useState("");
 
     const handleSave = () => {
-        console.log(name);
-        console.log(age);
-        console.log(diagnosis);
-        console.log(gender);
-        console.log(medications);
-
         const FormattedPD = moment(prescriptionDate, "YYYY-MM-DD").format(
             "DD-MM-YYYY"
         );
@@ -39,8 +36,34 @@ function UpdatePrescription() {
             "DD-MM-YYYY"
         );
 
-        console.log(FormattedPD);
-        console.log(FormattedNVD);
+        if (age < 0 || age > 150) {
+            setAge(1);
+            toast({
+                title: "Age is invalid",
+                description: "Age should be between 1 - 150",
+                status: "warning",
+                duration: 2000,
+                isClosable: true,
+            });
+
+            return;
+        }
+
+        if (
+            diagnosis.length > 400 ||
+            medications.length > 400 ||
+            name.length > 400
+        ) {
+            toast({
+                title: "Length exceed",
+                description: "Length should be less than 400 characters",
+                status: "warning",
+                duration: 2000,
+                isClosable: true,
+            });
+
+            return;
+        }
 
         axios
             .put(`http://localhost:8080/api/update/${id}`, {
@@ -54,12 +77,20 @@ function UpdatePrescription() {
             })
             .then(function(response) {
                 console.log(response);
-                alert("Success");
+                toast({
+                    title: "Success",
+                    description: "Successfully updated to the database",
+                    status: "success",
+                    duration: 2000,
+                    isClosable: true,
+                });
             })
             .catch(function(error) {
                 console.log(error);
                 alert("Error");
             });
+
+        history.push("/");
     };
 
     useEffect(() => {
@@ -180,7 +211,6 @@ function UpdatePrescription() {
                         mb="5px"
                         type="date"
                         w="70%"
-                        required
                         value={nextVisitDate}
                         onChange={(e) => setNextVisitDate(e.target.value)}
                     />
@@ -198,8 +228,7 @@ function UpdatePrescription() {
                             !diagnosis ||
                             !gender ||
                             !medications ||
-                            !prescriptionDate ||
-                            !nextVisitDate
+                            !prescriptionDate
                         }
                     >
                         Update

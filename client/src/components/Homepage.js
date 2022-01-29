@@ -12,6 +12,7 @@ import {
     Th,
     Tbody,
     Td,
+    Code,
 } from "@chakra-ui/react";
 import moment from "moment";
 import { fakeData } from "../fakeData";
@@ -23,16 +24,9 @@ function Homepage() {
     const [toDate, setToDate] = useState("");
     const [dataItems, setDataItems] = useState([]);
     const [allPrescriptions, setAllPrescriptions] = useState([]);
-    const [deleted, setDeleted] = useState(0);
+    const [deleted, setDeleted] = useState(1);
 
     const handelSearch = () => {
-        const FormattedFromDate = moment(fromDate, "YYYY-MM-DD").format(
-            "DD-MM-YYYY"
-        );
-        const FormattedToDate = moment(toDate, "YYYY-MM-DD").format(
-            "DD-MM-YYYY"
-        );
-
         const dateRange = dateRangeArr(fromDate, toDate);
         const filteredData = filterItemsBasedOnDate(
             dateRange,
@@ -41,15 +35,30 @@ function Homepage() {
         setDataItems(filteredData);
     };
 
+    const generateReport = () => {
+        const result = {};
+
+        allPrescriptions.forEach(function(o) {
+            Object.keys(o).forEach(function(k) {
+                result[k] = result[k] || {};
+                result[k][o[k]] = (result[k][o[k]] || 0) + 1;
+            });
+        });
+
+        return result?.prescriptionDate;
+    };
+
     const getAllPrescriptions = () => {
         axios
-            .get(`http://localhost:8080/api/all`)
+            .get(`http://localhost:8080/api/v1/prescription`)
             .then((response) => {
                 setAllPrescriptions(response.data);
             })
             .catch((error) => {
                 console.log(error);
             });
+
+        console.log(allPrescriptions);
     };
 
     const dateRangeArr = (from, to) => {
@@ -99,7 +108,7 @@ function Homepage() {
     useEffect(() => {
         console.log("---Component Mounted---");
         axios
-            .get(`http://localhost:8080/api/all`)
+            .get(`http://localhost:8080/api/v1/prescription`)
             .then((response) => {
                 setAllPrescriptions(response.data);
             })
@@ -116,8 +125,9 @@ function Homepage() {
         setFromDate(startOfMonth);
         setToDate(endOfMonth);
         const dateRange = dateRangeArr(startOfMonth, endOfMonth);
+
         axios
-            .get(`http://localhost:8080/api/all`)
+            .get(`http://localhost:8080/api/v1/prescription`)
             .then((response) => {
                 const allData = response.data;
                 const data = filterItemsBasedOnDate(dateRange, allData);
@@ -252,6 +262,14 @@ function Homepage() {
                         </Tbody>
                     </Table>
                 )}
+
+                <Center mt="10px">
+                    <Text fontSize="md" mr="5px">
+                        Date Wise Count:
+                    </Text>
+
+                    <Code p="5px">{JSON.stringify(generateReport())}</Code>
+                </Center>
             </Container>
         </>
     );
