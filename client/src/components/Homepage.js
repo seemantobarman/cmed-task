@@ -12,7 +12,6 @@ import {
     Th,
     Tbody,
     Td,
-    Code,
 } from "@chakra-ui/react";
 import moment from "moment";
 import { fakeData } from "../fakeData";
@@ -35,8 +34,9 @@ function Homepage() {
         setDataItems(filteredData);
     };
 
-    const generateReport = () => {
+    const GenerateReport = () => {
         const result = {};
+        const results = [];
 
         allPrescriptions.forEach(function(o) {
             Object.keys(o).forEach(function(k) {
@@ -45,7 +45,47 @@ function Homepage() {
             });
         });
 
-        return result?.prescriptionDate;
+        if (allPrescriptions.length > 0) {
+            for (const [key, value] of Object.entries(
+                result.prescriptionDate
+            )) {
+                results.push({ [key]: value });
+            }
+        }
+
+        // return result?.prescriptionDate;
+
+        return (
+            <div>
+                {allPrescriptions.length > 0 && (
+                    <Table variant="striped" bgColor="gray.50" mt="50px">
+                        <TableCaption>
+                            Date wise prescription count
+                        </TableCaption>
+                        <Thead>
+                            <Tr>
+                                <Th>Date</Th>
+                                <Th>Count</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {results.forEach((item, index) => {
+                                for (const [key, value] of Object.entries(
+                                    item
+                                )) {
+                                    return (
+                                        <Tr key={index}>
+                                            <Td>{key}</Td>
+                                            <Td>{value}</Td>
+                                        </Tr>
+                                    );
+                                }
+                            })}
+                        </Tbody>
+                    </Table>
+                )}
+            </div>
+        );
     };
 
     const getAllPrescriptions = () => {
@@ -231,7 +271,12 @@ function Homepage() {
                                         <Td>{item.diagnosis}</Td>
                                         <Td>{item.medications}</Td>
                                         <Td>{item.prescriptionDate}</Td>
-                                        <Td>{item.nextVisitDate}</Td>
+                                        <Td>
+                                            {item.nextVisitDate ===
+                                            "Invalid date"
+                                                ? "(-)"
+                                                : item.nextVisitDate}
+                                        </Td>
                                         <Td>
                                             <Link
                                                 style={{
@@ -263,13 +308,7 @@ function Homepage() {
                     </Table>
                 )}
 
-                <Center mt="10px">
-                    <Text fontSize="md" mr="5px">
-                        Date Wise Count:
-                    </Text>
-
-                    <Code p="5px">{JSON.stringify(generateReport())}</Code>
-                </Center>
+                <Center mt="10px">{GenerateReport()}</Center>
             </Container>
         </>
     );
