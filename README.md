@@ -1,3 +1,8 @@
+## User Credentials
+
+-   username: admin
+-   passowrd: admin12345
+
 ## Run Client
 
 -   cd client
